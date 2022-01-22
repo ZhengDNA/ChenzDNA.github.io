@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-01-22T16:04:23.536Z</updated>
+    <updated>2022-01-22T20:37:13.848Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -10,4 +10,25 @@
     <logo>https://chenzdna.github.io/images/avatar.png</logo>
     <icon>https://chenzdna.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 阿征DNA</rights>
+    <entry>
+        <title type="html"><![CDATA[关于 pypadb 的一些细节 #1]]></title>
+        <id>https://chenzdna.github.io/post/guan-yu-pypadb-de-yi-xie-xi-jie-1/</id>
+        <link href="https://chenzdna.github.io/post/guan-yu-pypadb-de-yi-xie-xi-jie-1/">
+        </link>
+        <updated>2022-01-22T19:01:07.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="名字">名字</h1>
+<p>pypadb，听起来挺怪的，念也不好念，但这个名字是可以解释的。各位应该都听说过 JPA（Java Persistence API，Java 持久层应用程序编程接口 <s>好几把长</s>），是一个新的 Java ORM（Object Relational Mapping，对象-关系映射）规范（现在来说也不是很新，但是很好用）。所以pypadb 的 pypa 就是 Python Persistence API。为啥要加一个 db 呢，因为 PyPI （Python Package Index，Python 包的仓库）里面已经有一个包叫 pyPA 了，所以就加了一个 db 表示 Database，咱们是和数据库打交道的。</p>
+<h1 id="初衷">初衷</h1>
+<p>去年搞了一段时间的 QQ 机器人，用的是基于 Python 的框架 nonebot。功能渐渐地做多了，难免要用到数据库。正好那时候学了 Mybatis，想着在 Python 里有没有 Mybatis 一样的东西，找了一圈发现虽然说是有开发者开发了更方便地操作数据库的包，但是还是没达到我的心理预期。于是 pypadb 的开发就被提上了日程。</p>
+<p>然后就是寒假开始试着用了 Mybatis Plus，在 Spring Boot 里兼容 Mybatis，而且写一些简单的 CURD（Create Update Retrieve Delete，数据库的操作）比 Mybatis 更好用，于是在 pypadb 里也加上了 Mybatis Plus 的写法。</p>
+<h1 id="一些吐槽">一些吐槽</h1>
+<p>首先是 Python 的类型注解，泛型和反射。Python 作为一个动态强类型语言，类型注解和泛型在编译和运行期毫无意义，唯一的用处是在敲代码的时候给类型提示而已。但是这类型啊，十分的珍贵。早期一些包 IDE 没有类型提示，写起来跟吃了💩一样，所以还是表上类型比较好。但是即使你能标的地方都表上了类型，还是有些地方 IDE 解析不了，以后再细说。</p>
+<p>与 Java 不一样，Python 的泛型完全变成了另外一种类型 GenericAlias ，要判断一个泛型的 list 到底是哪种类型，只能把所有的泛型都给比较一遍 <s>好傻逼</s>。殊途同归，Python 拿不到泛型类里的泛型，所以干脆直接指定一个类作为要处理的泛型了，这样耦合度会增加，所以用了 pydantic 来解耦。</p>
+<p>至于反射，我觉得还行。基本的功能都做到了，可以拿到函数的类型注解和返回值的类型注解，封装成工具模块后用起来还是挺好的。</p>
+<h1 id="the-end">The End</h1>
+<p>搞了几天，才把查询搞出来。实际上 JPA 这种东西是简化增删改的，只是我觉得写查询比较好玩所以就先把查询的写了。</p>
+<p>话说 pypadb 也不算 ORM 的框架啊，我把 ORM 的部分都交给 pydantic 做了。它应该算啥呢。</p>
+<p>2022-01-23</p>
+]]></content>
+    </entry>
 </feed>
