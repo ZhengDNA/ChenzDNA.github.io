@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1643146031205">
+<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1643146312747">
 <link rel="stylesheet" href="https://chenzdna.github.io/styles/main.css">
 
 
@@ -39,7 +39,7 @@ pip install pypadb
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://chenzdna.github.io">
-        <img src="https://chenzdna.github.io/images/avatar.png?v=1643146031205" class="site-logo">
+        <img src="https://chenzdna.github.io/images/avatar.png?v=1643146312747" class="site-logo">
         <h1 class="site-title">阿征DNA</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -202,6 +202,7 @@ pip install pypadb
 </tr>
 </tbody>
 </table>
+<p>使用 DictCursor 作为默认指针的原因是 DictCursor 会把每一行的查询结果作为 dict 返回 <code>{'列名':'数据'}</code>，表结构改变时需要改动的代码少很多。</p>
 <p>配置完后要调用 <code>end</code> 方法，初始化连接池。</p>
 <p>完整的配置如下：</p>
 <pre><code class="language-python">from pypadb.conf.db_configurer import db_configurer, DbConfigurer
