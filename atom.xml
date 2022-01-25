@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-01-23T13:32:58.189Z</updated>
+    <updated>2022-01-25T21:27:16.756Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -10,6 +10,145 @@
     <logo>https://chenzdna.github.io/images/avatar.png</logo>
     <icon>https://chenzdna.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 阿征DNA</rights>
+    <entry>
+        <title type="html"><![CDATA[papadb 使用文档 #1、安装和配置项]]></title>
+        <id>https://chenzdna.github.io/post/papadb-shi-yong-wen-dang-1an-zhuang-he-pei-zhi-xiang/</id>
+        <link href="https://chenzdna.github.io/post/papadb-shi-yong-wen-dang-1an-zhuang-he-pei-zhi-xiang/">
+        </link>
+        <updated>2022-01-25T20:22:06.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="安装">安装</h1>
+<p>pypadb 依赖于 DBUtils、pydandic、PyMySQL，建议使用虚拟环境，避免污染全局依赖。</p>
+<p><code>pip install pypadb</code></p>
+<h1 id="数据库连接配置">数据库连接配置</h1>
+<p>数据库连接用的是 pymysql，使用 DBUtils 作为连接池。</p>
+<p>pypadb.conf.db_configurer 里有一堆 setter，是用来做数据库连接池配置的。</p>
+<p>由于篇幅原因就不写方法具体内容了，返回的是 self，所以支持链式调用的写法。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>配置项</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>set_creator</td>
+<td>配置连接数据库的模块</td>
+<td>pymysql</td>
+</tr>
+<tr>
+<td>set_maxconnections</td>
+<td>连接池允许的最大连接数，0 和 None 表示不限制连接数</td>
+<td>6</td>
+</tr>
+<tr>
+<td>set_mincached</td>
+<td>初始化时，链接池中至少创建的空闲的链接，0 表示不创建</td>
+<td>2</td>
+</tr>
+<tr>
+<td>set_maxcached</td>
+<td>链接池中最多闲置的链接，0和None不限制</td>
+<td>5</td>
+</tr>
+<tr>
+<td>set_blocking</td>
+<td>连接池中如果没有可用连接后，是否阻塞等待。True，等待；False，不等待然后报错</td>
+<td>True</td>
+</tr>
+<tr>
+<td>set_maxusage</td>
+<td>一个链接最多被重复使用的次数，None表示无限制</td>
+<td>None</td>
+</tr>
+<tr>
+<td>set_setsession</td>
+<td>开始会话前执行的命令列表</td>
+<td>[]</td>
+</tr>
+<tr>
+<td>set_host</td>
+<td>数据库服务端主机名</td>
+<td>127.0.0.1</td>
+</tr>
+<tr>
+<td>set_port</td>
+<td>数据库服务端端口号</td>
+<td>3306</td>
+</tr>
+<tr>
+<td>set_user</td>
+<td>数据库登录用户</td>
+<td>root</td>
+</tr>
+<tr>
+<td>set_password</td>
+<td>数据库登录密码</td>
+<td>123456</td>
+</tr>
+<tr>
+<td>set_database</td>
+<td>数据库名</td>
+<td>test</td>
+</tr>
+<tr>
+<td>set_charset</td>
+<td>数据库连接使用的字符编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td>set_cursor</td>
+<td>数据库查询使用的指针类型</td>
+<td>pymysql.cursors.DictCursor</td>
+</tr>
+</tbody>
+</table>
+<p>配置完后要调用 <code>end</code> 方法，初始化连接池。</p>
+<p>完整的配置如下：</p>
+<pre><code class="language-python">from pypadb.conf.db_configurer import db_configurer, DbConfigurer
+
+db_configurer \
+    .set_host('localhost') \
+    .set_user('root') \
+    .set_password('123456') \
+    .set_database('test') \
+    .end()
+
+# 或者自己 new 一个对象
+DbConfigurer() \
+    .set_host('localhost') \
+    .set_user('root') \
+    .set_password('123456') \
+    .set_database('test') \
+    .end()
+</code></pre>
+<h1 id="数据表配置仅对象数据映射部分会用到">数据表配置（仅对象数据映射部分会用到）</h1>
+<pre><code class="language-python">from pydantic import BaseModel
+from pypadb.conf.table_configurer import tables
+
+
+class User(BaseModel):
+    id: int
+    account: str
+    stuffs: list = []
+
+# 实体类必须继承 pydantic 的 BaseModel
+class Stuff(BaseModel):
+    user_id: int
+    name: str
+    count: int
+
+# 真正的配置部分 表名=类名
+tables.init_tables(user=User, stuff=Stuff)
+# 使用表格配置的内容
+tables.user.select_one()
+tables.stuff.select_many()
+</code></pre>
+<p>使用数据表就不需要另外写什么类或者模块，表和类的映射配好后直接把表作为 tables 的属性进行调用。</p>
+<p>2022-01-26</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[关于 pypadb 的一些细节 #1]]></title>
         <id>https://chenzdna.github.io/post/guan-yu-pypadb-de-yi-xie-xi-jie-1/</id>
