@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-01-29T09:41:11.320Z</updated>
+    <updated>2022-01-30T13:40:33.545Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -10,6 +10,136 @@
     <logo>https://chenzdna.github.io/images/avatar.png</logo>
     <icon>https://chenzdna.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 阿征DNA</rights>
+    <entry>
+        <title type="html"><![CDATA[pypadb 使用文档 #4、使用 tables 查询]]></title>
+        <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-4shi-yong/</id>
+        <link href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-4shi-yong/">
+        </link>
+        <updated>2022-01-30T12:14:20.000Z</updated>
+        <content type="html"><![CDATA[<p>查询想对来说比较复杂，需要一些类来辅助。</p>
+<p>首先有三个方法：</p>
+<pre><code class="language-python">def select_one(self, extra=None, **kwargs):
+    pass
+
+def select_many(self, limit: Limit = None, extra=None, **kwargs) -&gt; list:
+    pass
+
+def select_like(self,
+                likes: Union[list[Like], Like] = {},
+                limit: Limit = None,
+                extra=None) -&gt; list:
+    pass
+</code></pre>
+<ul>
+<li><code>select_one</code> 查询单个对象。</li>
+<li><code>select_many</code> 查询多个对象，把结果集中的内容以 <code>list</code> 的形式返回。</li>
+<li><code>select_like</code> 模糊查询，总是以 <code>list</code> 的形式返回。</li>
+</ul>
+<p>为了方便演示，在 <a href="/post/pypadb-shi-yong-wen-dang-2">pypadb 使用文档 #2</a> 的表和实体类的基础上新增如下表和实体类：</p>
+<pre><code class="language-sql">create table stuff
+(
+    test_id bigint       not null,
+    name    varchar(20)  null,
+    count   int unsigned null
+);
+</code></pre>
+<pre><code class="language-python"># 新增 Stuff 类对应 stuff 表
+class Stuff(BaseModel):
+    test_id: int
+    name: str
+    count: int
+
+# 修改 Test，新增 stuffs 属性
+class Test(BaseModel):
+    id: Optional[int]
+    content: str
+    stuffs: Optional[list[Stuff]]
+    ctime: Optional[int]
+    mtime: Optional[int]
+</code></pre>
+<p><code>test</code> 表里的 <code>id</code> 属性对应 <code>stuff</code> 表里的 <code>test_id</code>，在查询 <code>test</code> 表时应该把对应的 <code>Stuff</code> 对象都查出来。</p>
+<h1 id="初始化">初始化</h1>
+<pre><code class="language-python">from pypadb.conf.table_configurer import tables
+
+tables.init_tables(stuff=Stuff, test=Test)
+</code></pre>
+<h1 id="select_one">select_one</h1>
+<pre><code class="language-python"># 不带任何参数，返回表中的第一条数据（应该没人用这个）
+tables.test.select_one()
+
+# 使用 extra
+from pypadb.utils.conditions import extra
+
+tables.test.select_one(
+    id=1,
+    extra=extra(column=['id', 'test_id'],
+                data_property='stuffs',
+                method=tables.stuff.select_many)
+)
+
+# 传入查询条件
+tables.tset.select_one(id=1)
+</code></pre>
+<p>参数 <code>extra</code> 比较特殊，它接受 <code>pypadb.utils.conditions.extra</code> 函数返回的值并进行对应的处理。</p>
+<p><code>pypadb.utils.conditions.extra</code> 函数接受三个参数 <code>column</code>、<code>data_property</code>、<code>method</code>。</p>
+<ul>
+<li><code>column</code>：一个长度为 2 的数组，值为 [当前调用表的列名, 需要额外查询的表的列名]。当前表和额外表是一对多的关系。</li>
+<li><code>data_property</code>：需要填充的属性名。</li>
+<li><code>method</code>：查询的方法。</li>
+</ul>
+<p><code>select_one</code> 在处理 <code>extra</code> 的时候会调用查询的方法，自动填充当前表查询出来的属性。</p>
+<p>如上面的示例代码，把所有 <code>stuff</code> 表里 <code>test_id</code> 为 1 的数据全查出来填充到结果里的 <code>stuffs</code> 属性里。</p>
+<h1 id="select_many">select_many</h1>
+<pre><code class="language-python">from pypadb.utils.conditions import Limit
+
+tables.test.select_many(limit=Limit(0, 1))
+</code></pre>
+<p><code>select_many</code> 只是比 <code>select_one</code> 多一个可选参数 <code>limit</code>。</p>
+<p>顾名思义，<code>limit</code> 是用来做查询分页的，<code>Limit(start, count)</code> 会解析成 <code>limit %(start)s, %(count)s</code>，其中 <code>count</code> 为可选参数，若不传 <code>count</code> 则会解析成 <code>limit %(start)s</code></p>
+<h1 id="select_like">select_like</h1>
+<pre><code class="language-python">from pypadb.utils.conditions import Like
+from pypadb.utils.enums import LikeEnum
+
+tables.test.select_like(likes=Like('content', '1', LikeEnum.ALL_Like))
+</code></pre>
+<p><code>select_like</code> 相比 <code>select_many</code>，多了一个参数 <code>likes</code>，接受的值可以为 <code>Like</code> 或 <code>list[Like]</code>。若以 <code>list[Like]</code> 的形式传参，则模糊查询之间以 <code>or</code> 相连，即所有的模糊匹配都会生效。</p>
+<p><code>Like(column, value, like_type)</code> 需要指定模糊查询的列名，并传一个模糊查询的值。会根据 <code>like_type</code> 来解析左右模糊匹配或者全模糊匹配。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[pypadb 使用文档 #3、初始化 tables && 使用 tables 增删改]]></title>
+        <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-3chu-shi-hua-tables/</id>
+        <link href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-3chu-shi-hua-tables/">
+        </link>
+        <updated>2022-01-30T10:19:22.000Z</updated>
+        <content type="html"><![CDATA[<p>沿用 <a href="/post/pypadb-shi-yong-wen-dang-2">pypadb 使用文档 #2</a> 的表和实体类，这一篇将会使用 <code>pypadb.conf.table_configurer.tables</code> 来进行实体类和表的映射，极大的增加编写 CURD 的效率。</p>
+<h1 id="初始化">初始化</h1>
+<pre><code class="language-python">from pypadb.conf.table_configurer import tables
+
+tables.init_tables(test=Test)
+</code></pre>
+<p><code>init_tables</code> 以 <strong>表名=类</strong> 的形式接受一些 <code>kwargs</code>，可以多次调用，重复的值会覆盖。</p>
+<p>在调用后可以用 <code>tables.test</code> 或者 <code>tables['test']</code> 的形式操作数据表。</p>
+<h1 id="insert">insert</h1>
+<pre><code class="language-python"># 单个插入
+tables.test.insert(Test(content='123'))
+# 批量插入
+tables.test.insert([Test(content='111'), Test(content='222')])
+</code></pre>
+<p><code>insert</code> 方法接受一个参数作为插入的实体对象，可以为一个对象或者 <code>list</code>。返回插入后的主键。为 <code>list</code> 时返回值为最后插入的主键。</p>
+<h1 id="update">update</h1>
+<pre><code class="language-python"># 更新 id 为 1 的数据
+tables.test.update(Test(content='333'), id=1)
+</code></pre>
+<p><code>update</code> 方法第一个参数为修改的实体对象，后面还有若干 kwargs 作为查询条件。</p>
+<p>需要注意的是，查询条件为空时 <code>update</code> 方法不会修改任何值。</p>
+<h1 id="delete">delete</h1>
+<pre><code class="language-python"># 删除 id 为 1 的数据
+tables.test.delete(id=1)
+</code></pre>
+<p>和 <code>update</code> 方法相同，kwargs 为空时 <code>delete</code> 方法不会进行任何操作。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[pypadb 使用文档 #2、使用装饰器进行增删改查操作]]></title>
         <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-2/</id>
@@ -33,6 +163,11 @@
     ctime: Optional[int]
     mtime: Optional[int]
 </code></pre>
+<ul>
+<li>实体类须继承 <code>pydantic.BaseModel</code>。</li>
+<li>实体类的属性须添加类型注释。</li>
+<li>可以为 <code>None</code> 的属性或- 不在数据库表里的属性须用 <code>Optional</code> 包裹。</li>
+</ul>
 <h1 id="insert">@insert</h1>
 <pre><code class="language-python">from pypadb.decorator import insert
 
