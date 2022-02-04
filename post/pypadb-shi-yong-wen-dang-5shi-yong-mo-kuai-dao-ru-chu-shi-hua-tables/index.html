@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>pypadb 使用文档 #3、初始化 tables &amp;&amp; 使用 tables 增删改 | 阿征DNA</title>
+<title>pypadb 使用文档 #5、使用模块导入初始化 tables | 阿征DNA</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,10 +24,12 @@
 
 
 
-    <meta name="description" content="沿用 pypadb 使用文档 #2 的表和实体类，这一篇将会使用 pypadb.conf.table_configurer.tables 来进行实体类和表的映射，极大的增加编写 CURD 的效率。
-初始化
-from pypadb.conf...." />
-    <meta name="keywords" content="项目文档,pypadb" />
+    <meta name="description" content="这个算更新的内容，所以就没改以前写的初始化 tables 了。
+使用之前的例子：
+from typing import Optional as _Optional
+
+from pydantic import BaseModel as _Ba..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -104,60 +106,53 @@ from pypadb.conf...." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">pypadb 使用文档 #3、初始化 tables &amp;&amp; 使用 tables 增删改</h2>
-            <div class="post-date">2022-01-30</div>
-            
-              <div class="feature-container" style="background-image: url('https://chenzdna.github.io/post-images/pypadb-shi-yong-wen-dang-3chu-shi-hua-tables.png')">
-              </div>
+            <h2 class="post-title">pypadb 使用文档 #5、使用模块导入初始化 tables</h2>
+            <div class="post-date">2022-02-04</div>
             
             <div class="post-content" v-pre>
-              <p>沿用 <a href="/post/pypadb-shi-yong-wen-dang-2">pypadb 使用文档 #2</a> 的表和实体类，这一篇将会使用 <code>pypadb.conf.table_configurer.tables</code> 来进行实体类和表的映射，极大的增加编写 CURD 的效率。</p>
-<h1 id="初始化">初始化</h1>
+              <p>这个算更新的内容，所以就没改以前写的初始化 tables 了。</p>
+<p>使用之前的例子：</p>
+<pre><code class="language-python">from typing import Optional as _Optional
+
+from pydantic import BaseModel as _BaseModel
+
+
+class Stuff(_BaseModel):
+    test_id: int
+    name: str
+    count: int
+
+
+class Test(_BaseModel):
+    id: _Optional[int]
+    content: str
+    stuffs: _Optional[list[StuffWuhu]]
+    ctime: _Optional[int]
+    mtime: _Optional[int]
+</code></pre>
+<p>把这两个类写到一个模块里面，注意 <code>import</code> 导包要转为下划线开头的包名，以免 pypadb 识别错误。</p>
 <pre><code class="language-python">from pypadb.conf.table_configurer import tables
 
-tables.init_tables(test=Test)
+# 那两个类所在的包
+import entities
+
+if __name__ == '__main__':
+    # 初始化tables
+    tables.init_tables(entities)
+    # tables.test
+    # tables.stuff
+    print(tables.tables)
 </code></pre>
-<p><code>init_tables</code> 以 <strong>表名=类</strong> 的形式接受一些 <code>kwargs</code>，可以多次调用，重复的值会覆盖。</p>
-<p>在调用后可以用 <code>tables.test</code> 或者 <code>tables['test']</code> 的形式操作数据表。</p>
-<h1 id="insert">insert</h1>
-<pre><code class="language-python"># 单个插入
-tables.test.insert(Test(content='123'))
-# 批量插入
-tables.test.insert([Test(content='111'), Test(content='222')])
-</code></pre>
-<p><code>insert</code> 方法接受一个参数作为插入的实体对象，可以为一个对象或者 <code>list</code>。返回插入后的主键。为 <code>list</code> 时返回值为最后插入的主键。</p>
-<h1 id="update">update</h1>
-<pre><code class="language-python"># 更新 id 为 1 的数据
-tables.test.update(Test(content='333'), id=1)
-</code></pre>
-<p><code>update</code> 方法第一个参数为修改的实体对象，后面还有若干 kwargs 作为查询条件。</p>
-<p>需要注意的是，查询条件为空时 <code>update</code> 方法不会修改任何值。</p>
-<h1 id="delete">delete</h1>
-<pre><code class="language-python"># 删除 id 为 1 的数据
-tables.test.delete(id=1)
-</code></pre>
-<p>和 <code>update</code> 方法相同，kwargs 为空时 <code>delete</code> 方法不会进行任何操作。</p>
+<p>这种初始化会把驼峰命名的类名转成下划线来使用，也可以设置参数 <code>escape_upper=True</code> 不处理驼峰命名。</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://chenzdna.github.io/tag/xiang-mu-wen-dang/" class="tag">
-                    项目文档
-                  </a>
-                
-                  <a href="https://chenzdna.github.io/tag/pypadb/" class="tag">
-                    pypadb
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-2/">
+                <a href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-4shi-yong/">
                   <h3 class="post-title">
-                    pypadb 使用文档 #2、使用装饰器进行增删改查操作
+                    pypadb 使用文档 #4、使用 tables 查询
                   </h3>
                 </a>
               </div>

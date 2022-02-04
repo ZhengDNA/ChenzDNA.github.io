@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-01-30T13:40:33.545Z</updated>
+    <updated>2022-02-04T15:55:03.628Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -10,6 +10,48 @@
     <logo>https://chenzdna.github.io/images/avatar.png</logo>
     <icon>https://chenzdna.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 阿征DNA</rights>
+    <entry>
+        <title type="html"><![CDATA[pypadb 使用文档 #5、使用模块导入初始化 tables]]></title>
+        <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-5shi-yong-mo-kuai-dao-ru-chu-shi-hua-tables/</id>
+        <link href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-5shi-yong-mo-kuai-dao-ru-chu-shi-hua-tables/">
+        </link>
+        <updated>2022-02-04T15:41:27.000Z</updated>
+        <content type="html"><![CDATA[<p>这个算更新的内容，所以就没改以前写的初始化 tables 了。</p>
+<p>使用之前的例子：</p>
+<pre><code class="language-python">from typing import Optional as _Optional
+
+from pydantic import BaseModel as _BaseModel
+
+
+class Stuff(_BaseModel):
+    test_id: int
+    name: str
+    count: int
+
+
+class Test(_BaseModel):
+    id: _Optional[int]
+    content: str
+    stuffs: _Optional[list[StuffWuhu]]
+    ctime: _Optional[int]
+    mtime: _Optional[int]
+</code></pre>
+<p>把这两个类写到一个模块里面，注意 <code>import</code> 导包要转为下划线开头的包名，以免 pypadb 识别错误。</p>
+<pre><code class="language-python">from pypadb.conf.table_configurer import tables
+
+# 那两个类所在的包
+import entities
+
+if __name__ == '__main__':
+    # 初始化tables
+    tables.init_tables(entities)
+    # tables.test
+    # tables.stuff
+    print(tables.tables)
+</code></pre>
+<p>这种初始化会把驼峰命名的类名转成下划线来使用，也可以设置参数 <code>escape_upper=True</code> 不处理驼峰命名。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[pypadb 使用文档 #4、使用 tables 查询]]></title>
         <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-4shi-yong/</id>
