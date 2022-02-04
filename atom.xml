@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-02-04T15:55:03.628Z</updated>
+    <updated>2022-02-04T15:57:18.029Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -50,6 +50,7 @@ if __name__ == '__main__':
     print(tables.tables)
 </code></pre>
 <p>这种初始化会把驼峰命名的类名转成下划线来使用，也可以设置参数 <code>escape_upper=True</code> 不处理驼峰命名。</p>
+<p>2022-02-04</p>
 ]]></content>
     </entry>
     <entry>
