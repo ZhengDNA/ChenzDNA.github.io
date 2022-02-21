@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Spring Boot 监听 Redis 的键过期事件 | 阿征DNA</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1645431625667">
+<link rel="stylesheet" href="https://chenzdna.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Redis 配置
+方法一、更改配置文件，以配置文件启动
+进入 Redis 安装目录，修改 redis.windows.conf (Linux 下配置文件是 redis.conf)
+在第892行找到 notify-keyspace-event..." />
+    <meta name="keywords" content="笔记,Java,Redis,Spring Boot" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://chenzdna.github.io">
+        <img src="https://chenzdna.github.io/images/avatar.png?v=1645431625667" class="site-logo">
+        <h1 class="site-title">阿征DNA</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="/post/you-hao-de-di-fang" class="site-nav">
+            出没
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      修炼大魔法师
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://chenzdna.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Spring Boot 监听 Redis 的键过期事件</h2>
+            <div class="post-date">2022-02-21</div>
+            
+              <div class="feature-container" style="background-image: url('https://chenzdna.github.io/post-images/spring-boot-jian-ting-redis-de-jian-guo-qi-shi-jian.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="redis-配置">Redis 配置</h1>
+<h2 id="方法一-更改配置文件以配置文件启动">方法一、更改配置文件，以配置文件启动</h2>
+<p>进入 Redis 安装目录，修改 <code>redis.windows.conf</code> (Linux 下配置文件是 <code>redis.conf</code>)</p>
+<p>在第892行找到 <code>notify-keyspace-events</code> (Windows 系统，Redis 版本 5.0.10)</p>
+<p><code>notify-keyspace-events &quot;&quot;</code></p>
+<p>上面有配置项的注释</p>
+<pre><code>K     Keyspace events, published with __keyspace@&lt;db&gt;__ prefix.
+E     Keyevent events, published with __keyevent@&lt;db&gt;__ prefix.
+g     Generic commands (non-type specific) like DEL, EXPIRE, RENAME, ...
+$     String commands
+l     List commands
+s     Set commands
+h     Hash commands
+z     Sorted set commands
+x     Expired events (events generated every time a key expires)
+e     Evicted events (events generated when a key is evicted for maxmemory)
+A     Alias for g$lshzxe, so that the &quot;AKE&quot; string means all the events.
+</code></pre>
+<p>配置此项为键事件过期通知</p>
+<p><code>notify-keyspace-events Ex</code></p>
+<p>以配置文件启动</p>
+<p><code>redis-server redis.windows.conf</code></p>
+<h2 id="方法二-在-redis-cli-中配置">方法二、在 redis-cli 中配置</h2>
+<p>运行 <code>redis-cli</code>，运行命令</p>
+<p><code>config set notify-keyspace-events Ex</code></p>
+<p>或在终端直接运行命令</p>
+<p><code>redis-cli config set notify-keyspace-events Ex</code></p>
+<h1 id="spring-boot-监听">Spring Boot 监听</h1>
+<h2 id="引入依赖">引入依赖</h2>
+<pre><code class="language-xml">&lt;!-- maven --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<pre><code class="language-json">// gradle
+compile(&quot;org.springframework.boot:spring-boot-starter-data-redis&quot;)
+</code></pre>
+<h2 id="redismessagelistenerjava">RedisMessageListener.java</h2>
+<pre><code class="language-java">@Component
+public class RedisMessageListener implements MessageListener {
+    @Resource
+    private RedisTemplate&lt;String, Object&gt; redis;
+
+    @Override
+    public void onMessage(Message message, byte[] pattern) {
+        System.out.println(&quot;----------- &quot; + new String(pattern));
+        // 使用了 fastjson 来打印对象
+        System.out.println(JSONObject.toJSONString(message, true));
+        System.out.println(&quot;-------------------------------&quot;);
+        // 获取过期的键
+        System.out.println(redis.getValueSerializer().deserialize(message.getBody()));
+    }
+}
+</code></pre>
+<h2 id="redisconfigjava">RedisConfig.java</h2>
+<pre><code class="language-java">@Configuration
+public class RedisConfig {
+    @Resource
+    private RedisMessageListener messageListener;
+
+    @Bean
+    public RedisTemplate&lt;String, Object&gt; redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate&lt;String, Object&gt; template = new RedisTemplate&lt;&gt;();
+        template.setConnectionFactory(redisConnectionFactory);
+
+        template.setKeySerializer(new StringRedisSerializer());
+        final Jackson2JsonRedisSerializer&lt;Object&gt; serializer = new Jackson2JsonRedisSerializer&lt;&gt;(Object.class);
+        template.setValueSerializer(serializer);
+
+        return template;
+    }
+
+    @Bean
+    public ChannelTopic channelTopic() {
+        // 监听 Redis 键过期事件通知
+        return new ChannelTopic(&quot;__keyevent@0__:expired&quot;);
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory) {
+        RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
+        redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
+        redisMessageListenerContainer.addMessageListener(messageListener, channelTopic());
+        return redisMessageListenerContainer;
+    }
+}
+</code></pre>
+<h1 id="运行测试">运行测试</h1>
+<p>运行 <code>redis-cli</code> 输入命令</p>
+<p><code>set 123 456 PX 100</code></p>
+<p>键 123，值 456，100ms 后过期，若 ``PX<code>设为</code>EX` 则时间单位为秒。</p>
+<p>控制台打印</p>
+<pre><code>----------- __keyevent@0__:expired
+{
+	&quot;body&quot;:&quot;MTIz&quot;,
+	&quot;channel&quot;:&quot;X19rZXlldmVudEAwX186ZXhwaXJlZA==&quot;
+}
+-------------------------------
+123
+</code></pre>
+<p>成功拿到过期的键 123。</p>
+<h1 id="注意事项">注意事项</h1>
+<p>Spring Boot 2.6 默认禁止了循环引用，需要配置开启循环引用。</p>
+<pre><code class="language-yaml">spring:
+  main:
+    allow-circular-references: true
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://chenzdna.github.io/tag/bi-ji/" class="tag">
+                    笔记
+                  </a>
+                
+                  <a href="https://chenzdna.github.io/tag/java/" class="tag">
+                    Java
+                  </a>
+                
+                  <a href="https://chenzdna.github.io/tag/redis/" class="tag">
+                    Redis
+                  </a>
+                
+                  <a href="https://chenzdna.github.io/tag/spring-boot/" class="tag">
+                    Spring Boot
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-5shi-yong-mo-kuai-dao-ru-chu-shi-hua-tables/">
+                  <h3 class="post-title">
+                    pypadb 使用文档 #5、使用模块导入初始化 tables
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e7a0503076500140eb19',
+        clientSecret: 'ead801280c09997ad1f7c8d6c2d42f41bdfd8d0c',
+        repo: 'ChenzDNA.github.io',
+        owner: 'ChenzDNA',
+        admin: ['ChenzDNA'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
