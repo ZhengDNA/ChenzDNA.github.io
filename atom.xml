@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-02-21T09:23:34.539Z</updated>
+    <updated>2022-02-21T09:30:47.828Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -107,7 +107,7 @@ public class RedisConfig {
 <h1 id="运行测试">运行测试</h1>
 <h2 id="方法1-在-redis-cli-中操作">方法1、在 redis-cli 中操作</h2>
 <p><code>set 123 456 PX 100</code></p>
-<p>键 123，值 456，100ms 后过期，若 ``PX<code>设为</code>EX` 则时间单位为秒。</p>
+<p>键 123，值 456，100ms 后过期，若 <code>PX</code> 设为 <code>EX</code> 则时间单位为秒。</p>
 <h2 id="方法2-使用-spring-boot-操作">方法2、使用 Spring Boot 操作</h2>
 <pre><code class="language-java">
 @RestController
