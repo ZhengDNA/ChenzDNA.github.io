@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1645431625667">
+<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1645432129536">
 <link rel="stylesheet" href="https://chenzdna.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://chenzdna.github.io">
-        <img src="https://chenzdna.github.io/images/avatar.png?v=1645431625667" class="site-logo">
+        <img src="https://chenzdna.github.io/images/avatar.png?v=1645432129536" class="site-logo">
         <h1 class="site-title">阿征DNA</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -201,9 +201,26 @@ public class RedisConfig {
 }
 </code></pre>
 <h1 id="运行测试">运行测试</h1>
-<p>运行 <code>redis-cli</code> 输入命令</p>
+<h2 id="方法1-在-redis-cli-中操作">方法1、在 redis-cli 中操作</h2>
 <p><code>set 123 456 PX 100</code></p>
 <p>键 123，值 456，100ms 后过期，若 ``PX<code>设为</code>EX` 则时间单位为秒。</p>
+<h2 id="方法2-使用-spring-boot-操作">方法2、使用 Spring Boot 操作</h2>
+<pre><code class="language-java">
+@RestController
+public class TestController {
+    @Resource
+    private RedisTemplate&lt;String, Object&gt; redis;
+
+    @GetMapping(&quot;/redis&quot;)
+    public void re() throws InterruptedException {
+        ValueOperations&lt;String, Object&gt; ops = redis.opsForValue();
+        ops.set(&quot;123&quot;, &quot;456&quot;);
+        // 设置需要过期的键，过期时间，时间单位
+        redis.expire(&quot;123&quot;, 100L, TimeUnit.MILLISECONDS);
+    }
+}
+</code></pre>
+<h2 id="运行结果">运行结果</h2>
 <p>控制台打印</p>
 <pre><code>----------- __keyevent@0__:expired
 {
