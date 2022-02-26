@@ -395,6 +395,7 @@ a {
   flex: 1;
 }
 .post-item .left .post-title {
+  margin-top: 10px;
   font-size: 24px;
   transition: all 0.3s;
 }
@@ -417,9 +418,9 @@ a {
   width: 38.2%;
 }
 .post-item .right .feature-container {
-  padding-top: 56.25%;
-  height: 96px;
-  width: 170px;
+  height: 180px;
+  width: 320px;
+  margin: auto;
   background-size: cover;
   background-position: center;
   border-radius: 3px;
