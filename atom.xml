@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-02-21T09:30:47.828Z</updated>
+    <updated>2022-02-26T13:00:57.797Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -10,6 +10,34 @@
     <logo>https://chenzdna.github.io/images/avatar.png</logo>
     <icon>https://chenzdna.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 阿征DNA</rights>
+    <entry>
+        <title type="html"><![CDATA[装 Linux 系统后要做的事]]></title>
+        <id>https://chenzdna.github.io/post/zhuang-linux-xi-tong-hou-yao-zuo-de-shi/</id>
+        <link href="https://chenzdna.github.io/post/zhuang-linux-xi-tong-hou-yao-zuo-de-shi/">
+        </link>
+        <updated>2022-02-21T08:29:26.000Z</updated>
+        <content type="html"><![CDATA[<p>在二奶机上捣鼓 Linux 系统，有时候删了系统文件，重装了几次系统。为了以后重装系统配东西不再东找西找，就写了这一篇总结一下，<strong>仅供参考</strong>。</p>
+<h1 id="ssh-允许-root-用户远程登录">SSH 允许 root 用户远程登录</h1>
+<p>一般来说是不建议 root 用户登录 SSH，但是我又没公网 ip，就这样了。</p>
+<p>编辑 sshd 的配置文件：</p>
+<p><code>vim /etc/ssh/sshd_config</code></p>
+<p>找到 <code>PermitRootLogin</code>，设为 <code>yes</code>，记得去掉注释。</p>
+<p>重启 ssh，或者重启电脑：</p>
+<p><code>service sshd restart</code></p>
+<h1 id="设置笔记本合盖不睡眠">设置笔记本合盖不睡眠</h1>
+<p>编辑 <code>logind.conf</code>：</p>
+<p><code>vim /etc/systemd/logind.conf</code></p>
+<p>找到 <code>HandleLidSwitch</code>，改为 <code>ignore</code>，记得去掉注释。</p>
+<p>重启服务，或重启电脑：</p>
+<p><code>systemctl restart systemd-logind</code></p>
+<h1 id="系统工具安装">系统工具安装</h1>
+<pre><code class="language-bash">apt install -y lsof vim gcc default-jdk redis nginx mariadb nodejs ffmpeg
+</code></pre>
+<h1 id="python-依赖">Python 依赖</h1>
+<pre><code class="language-bash">python3 -m pip install BeautifulSoup4 fastapi requests nb-cli pydantic nonebot2
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring Boot 监听 Redis 的键过期事件]]></title>
         <id>https://chenzdna.github.io/post/spring-boot-jian-ting-redis-de-jian-guo-qi-shi-jian/</id>
