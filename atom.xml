@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-02-26T13:11:27.040Z</updated>
+    <updated>2022-03-26T13:50:49.217Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -10,6 +10,154 @@
     <logo>https://chenzdna.github.io/images/avatar.png</logo>
     <icon>https://chenzdna.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 阿征DNA</rights>
+    <entry>
+        <title type="html"><![CDATA[Java 使用枚举类与单例模式优化 if else 分支]]></title>
+        <id>https://chenzdna.github.io/post/java-shi-yong-mei-ju-lei-yu-dan-li-mo-shi-you-hua-ye-wu-luo-ji/</id>
+        <link href="https://chenzdna.github.io/post/java-shi-yong-mei-ju-lei-yu-dan-li-mo-shi-you-hua-ye-wu-luo-ji/">
+        </link>
+        <updated>2022-03-25T12:36:16.000Z</updated>
+        <content type="html"><![CDATA[<p>由于碰到了这样的需求，我又有点设计强迫症，故研究了一下。灵感来自我之前写的一个小工具 <a href="https://github.com/ChenzDNA/pypadb">pypadb</a>。实际上这种方法只适用于简单地查个数据然后返回给前端，要做修改的话还是需要判断查出来的类型再做强制类型转换。</p>
+<p>业务需求：根据前端传的一个代表数据种类的字符串和若干查询参数来查询不同表里的数据。</p>
+<p>一般来说可以用 if else 判断字符串来处理，但是这样在表比较多的时候会造成 if else 过多，而且 if else 里面还有可能嵌套其他的 if else，看着就头大。所以这次来介绍一个用枚举类来优化 if else 分支的方法。</p>
+<p>使用了 <a href="https://www.mybatis-plus.com/">Mybatis-Plus</a> 和 <a href="https://projectlombok.org/">lombok</a> 简化演示的代码，<code>Spring Boot Starter Test</code> 用来单元测试。</p>
+<h1 id="预设">预设</h1>
+<p>先上表结构（预先填了一列数据）：</p>
+<pre><code class="language-console">表 a
++-----+--------+
+| id  | data_a |
++-----+--------+
+| 123 | aaaaaa |
++-----+--------+
+
+表 b
++-----+--------+
+| id  | data_b |
++-----+--------+
+| 123 | bbbbbb |
++-----+--------+
+</code></pre>
+<p>实体类：</p>
+<pre><code class="language-java">@Data
+@TableName(&quot;a&quot;)
+public class AEntity {
+    @TableId
+    String id;
+    String dataA;
+}
+
+@Data
+@TableName(&quot;b&quot;)
+public class BEntity {
+    @TableId
+    String id;
+    String dataB;
+}
+</code></pre>
+<p>由于只是演示作用，就没写 Service 层了。实际开发中可以让所有 Service 或 Dao 都实现或继承一个接口，然后实现接口里的查询方法。</p>
+<pre><code class="language-java">@Mapper
+public interface ADao extends BaseMapper&lt;AEntity&gt; {
+}
+
+@Mapper
+public interface BDao extends BaseMapper&lt;BEntity&gt; {
+}
+</code></pre>
+<h1 id="关键代码">关键代码</h1>
+<p>枚举类：</p>
+<pre><code class="language-java">public enum TableEnum {
+    a(ADao.class),
+    b(BDao.class);
+
+    private Class daoClass;
+
+    private volatile BaseMapper dao;
+
+    TableEnum(Class daoClass) {
+        this.daoClass = daoClass;
+    }
+
+    public BaseMapper getDao() {
+        if (dao == null) {
+            synchronized (TableEnum.class) {
+                if (dao == null) {
+                    dao = (BaseMapper) IOCConfig.getBean(daoClass);
+                }
+            }
+        }
+        return dao;
+    }
+}
+</code></pre>
+<p>用到的单例模式加上了双重验证来防止并发问题。</p>
+<p>对应的单元测试：</p>
+<pre><code class="language-java">@SpringBootTest
+class BlogdemosApplicationTests {
+    public static String a = &quot;a&quot;;
+    public static String b = &quot;b&quot;;
+    public static String id = &quot;123&quot;;
+
+    @Test
+    void test1() {
+        Object o1 = TableEnum.valueOf(a).getDao().selectById(id);
+        Object o2 = TableEnum.valueOf(b).getDao().selectById(id);
+
+        System.out.println(&quot;------- o1 -------&quot;);
+        System.out.println(JSONObject.toJSONString(o1, true));
+        System.out.println(&quot;------- o2 -------&quot;);
+        System.out.println(JSONObject.toJSONString(o2, true));
+
+        // 要修改查出来的数据只能判断类型然后强转。
+        if (o1 instanceof AEntity) {
+            System.out.println(&quot;o1 instance AEnitty&quot;);
+        }
+        if (o2 instanceof BEntity) {
+            System.out.println(&quot;o2 instance BEnitty&quot;);
+        }
+    }
+}
+</code></pre>
+<h1 id="一些思考">一些思考</h1>
+<p>关于查出来的数据只能是 <code>Object</code> 类型这个问题，我想了一下，包括使用带泛型的普通类来模拟枚举类的行为，然后想通过反射来获取 <code>BaseMapper</code> 里对应的泛型，返回正确的类型。但是没想到怎么写。从宏观的角度看，想要解决这个问题，Jvm 就需要根据一个不知道是什么内容的字符串确定一个类型，静态类型语言的 Java 好像做不到这一点。</p>
+<h1 id="附">附</h1>
+<p>使用一般类来模拟枚举类的行为：</p>
+<pre><code class="language-java">@Slf4j
+public class Tables {
+    private static Map&lt;String, Class&gt; classMap = new ConcurrentHashMap&lt;&gt;();
+    private static Map&lt;String, BaseMapper&gt; daoMap = new ConcurrentHashMap&lt;&gt;();
+
+    private static void initClassMap(Object... args) {
+        if (args == null || args.length &lt; 2 || (args.length &amp; 1) == 1) {
+            log.error(&quot;Invalid arguments.&quot;);
+            return;
+        }
+        for (int i = 0; i &lt; args.length; i += 2) {
+            classMap.put((String) args[i], (Class) args[i + 1]);
+        }
+    }
+
+    static {
+        initClassMap(
+                &quot;a&quot;, ADao.class,
+                &quot;b&quot;, BDao.class
+        );
+    }
+
+    public static BaseMapper valueOf(String table) {
+        if (!classMap.containsKey(table)) {
+            return null;
+        }
+        BaseMapper dao = daoMap.get(table);
+        if (dao == null) {
+            dao = (BaseMapper) IOCConfig.getBean(classMap.get(table));
+            daoMap.put(table, dao);
+        }
+        return dao;
+    }
+}
+</code></pre>
+<p>不像枚举类，一般类可以一步就拿到对应的 Dao，只不过后期想要修改或添加其他的表需要改 static 代码块里面的代码，相比于枚举类来说少了一点优雅。并发问题就交给 <code>ConcurrentHashMap</code> 来解决。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[装 Linux 系统后要做的事]]></title>
         <id>https://chenzdna.github.io/post/zhuang-linux-xi-tong-hou-yao-zuo-de-shi/</id>
