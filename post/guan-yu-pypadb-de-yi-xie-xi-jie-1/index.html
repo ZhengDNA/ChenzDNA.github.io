@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1651036125794">
+<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1651036539961">
 <link rel="stylesheet" href="https://chenzdna.github.io/styles/main.css">
 
 
@@ -35,7 +35,7 @@ pypadb，听起来挺怪的，念也不好念，但这个名字是可以解释�
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://chenzdna.github.io">
-        <img src="https://chenzdna.github.io/images/avatar.png?v=1651036125794" class="site-logo">
+        <img src="https://chenzdna.github.io/images/avatar.png?v=1651036539961" class="site-logo">
         <h1 class="site-title">阿征DNA</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -117,7 +117,7 @@ pypadb，听起来挺怪的，念也不好念，但这个名字是可以解释�
 <p>然后就是寒假开始试着用了 Mybatis Plus，在 Spring Boot 里兼容 Mybatis，而且写一些简单的 CURD（Create Update Retrieve Delete，数据库的操作）比 Mybatis 更好用，于是在 pypadb 里也加上了 Mybatis Plus 的写法。</p>
 <h1 id="一些吐槽">一些吐槽</h1>
 <p>首先是 Python 的类型注解，泛型和反射。Python 作为一个动态强类型语言，类型注解和泛型在编译和运行期毫无意义，唯一的用处是在敲代码的时候给类型提示而已。但是这类型啊，十分的珍贵。早期一些包 IDE 没有类型提示，写起来跟吃了💩一样，所以还是表上类型比较好。但是即使你能标的地方都表上了类型，还是有些地方 IDE 解析不了，以后再细说。</p>
-<p>与 Java 不一样，Python 的泛型完全变成了另外一种类型 GenericAlias ，要判断一个泛型的 list 到底是哪种类型，只能把所有的泛型都给比较一遍 <s>好傻逼</s>。殊途同归，Python 拿不到泛型类里的泛型，所以干脆直接指定一个类作为要处理的泛型了，这样耦合度会增加，所以用了 pydantic 来解耦。</p>
+<p>与 Java 不一样，Python 的泛型完全变成了另外一种类型 GenericAlias ，要判断一个泛型的 list 到底是哪种类型，只能把所有的泛型都给比较一遍 <s>好傻逼</s>。Python 拿不到泛型类里的泛型，所以干脆直接指定一个类作为要处理的泛型了，这样耦合度会增加，所以用了 pydantic 来解耦。</p>
 <p>至于反射，我觉得还行。基本的功能都做到了，可以拿到函数的类型注解和返回值的类型注解，封装成工具模块后用起来还是挺好的。</p>
 <h1 id="the-end">The End</h1>
 <p>搞了几天，才把查询搞出来。实际上 JPA 这种东西是简化增删改的，只是我觉得写查询比较好玩所以就先把查询的写了。</p>
