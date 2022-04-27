@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-04-26T14:08:42.963Z</updated>
+    <updated>2022-04-27T05:08:52.953Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -71,6 +71,12 @@ access-control-allow-methods: GET,PUT,POST,DELETE,OPTIONS
 access-control-allow-origin: request.Header.Get(&quot;Origin&quot;)
 </code></pre>
 <p>然后保存，这次连接不会断了，除非调用 <code>connection.Close()</code> 方法。</p>
+<h1 id="不足之处">不足之处</h1>
+<h2 id="关于何时断开连接">关于何时断开连接</h2>
+<p>只用 <code>GoFrame</code> 也不是不能做，就是有点麻烦，首先得开一个计时的协程，<code>time</code> 库有封装好的，然后监听前端的心跳，如果预定的时间过后没收到心跳就断开连接。问题是有多少个连接就要开多少个协程，虽然协程的消耗非常少，但还是不想这么做。</p>
+<p>于是就想到了 <code>Redis</code>，可以监听 <code>Redis</code> 的键过期事件来断开对应的连接。缺点是还要额外开一个 <code>Redis</code>，还是有点麻烦。于是就偷懒在前端加了一个退出的按钮来关闭连接。</p>
+<h2 id="关于性能">关于性能</h2>
+<p>我也不知道如何测试 <code>chunked</code> 和 <code>websocket</code> 的性能，哪天再必应一下吧。</p>
 <p>2022-04-26</p>
 ]]></content>
     </entry>

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1650982111586">
+<link rel="shortcut icon" href="https://chenzdna.github.io/favicon.ico?v=1651036125794">
 <link rel="stylesheet" href="https://chenzdna.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ HTTP/1.1 200 OK
 Connection: keep-alive
 Transfer-Encoding: chunked
 ........." />
-    <meta name="keywords" content="" />
+    <meta name="keywords" content="后端,Golang,GoFrame,踩坑记录" />
   </head>
   <body>
     <div id="app" class="main">
@@ -42,7 +42,7 @@ Transfer-Encoding: chunked
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://chenzdna.github.io">
-        <img src="https://chenzdna.github.io/images/avatar.png?v=1650982111586" class="site-logo">
+        <img src="https://chenzdna.github.io/images/avatar.png?v=1651036125794" class="site-logo">
         <h1 class="site-title">阿征DNA</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -113,6 +113,9 @@ Transfer-Encoding: chunked
             <h2 class="post-title">[GoFrame] 使用 chunked 实现即时通信踩坑记录</h2>
             <div class="post-date">2022-04-26</div>
             
+              <div class="feature-container" style="background-image: url('https://chenzdna.github.io/post-images/goframe-shi-yong-chunked-shi-xian-ji-shi-tong-xin.jpg')">
+              </div>
+            
             <div class="post-content" v-pre>
               <h1 id="前置知识">前置知识</h1>
 <h2 id="http-响应格式">http 响应格式</h2>
@@ -169,9 +172,35 @@ access-control-allow-methods: GET,PUT,POST,DELETE,OPTIONS
 access-control-allow-origin: request.Header.Get(&quot;Origin&quot;)
 </code></pre>
 <p>然后保存，这次连接不会断了，除非调用 <code>connection.Close()</code> 方法。</p>
+<h1 id="不足之处">不足之处</h1>
+<h2 id="关于何时断开连接">关于何时断开连接</h2>
+<p>只用 <code>GoFrame</code> 也不是不能做，就是有点麻烦，首先得开一个计时的协程，<code>time</code> 库有封装好的，然后监听前端的心跳，如果预定的时间过后没收到心跳就断开连接。问题是有多少个连接就要开多少个协程，虽然协程的消耗非常少，但还是不想这么做。</p>
+<p>于是就想到了 <code>Redis</code>，可以监听 <code>Redis</code> 的键过期事件来断开对应的连接。缺点是还要额外开一个 <code>Redis</code>，还是有点麻烦。于是就偷懒在前端加了一个退出的按钮来关闭连接。</p>
+<h2 id="关于性能">关于性能</h2>
+<p>我也不知道如何测试 <code>chunked</code> 和 <code>websocket</code> 的性能，哪天再必应一下吧。</p>
 <p>2022-04-26</p>
 
             </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://chenzdna.github.io/tag/hou-duan/" class="tag">
+                    后端
+                  </a>
+                
+                  <a href="https://chenzdna.github.io/tag/golang/" class="tag">
+                    Golang
+                  </a>
+                
+                  <a href="https://chenzdna.github.io/tag/goframe/" class="tag">
+                    GoFrame
+                  </a>
+                
+                  <a href="https://chenzdna.github.io/tag/cai-keng-ji-lu/" class="tag">
+                    踩坑记录
+                  </a>
+                
+              </div>
             
             
               <div class="next-post">
