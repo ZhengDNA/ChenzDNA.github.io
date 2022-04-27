@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-04-27T05:15:41.448Z</updated>
+    <updated>2022-04-27T07:53:56.858Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -314,7 +314,7 @@ public class RedisMessageListener implements MessageListener {
         System.out.println(JSONObject.toJSONString(message, true));
         System.out.println(&quot;-------------------------------&quot;);
         // 获取过期的键
-        System.out.println(redis.getValueSerializer().deserialize(message.getBody()));
+        System.out.println(redis.getKeySerializer().deserialize(message.getBody()));
     }
 }
 </code></pre>
