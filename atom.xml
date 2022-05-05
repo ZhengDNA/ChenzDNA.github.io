@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chenzdna.github.io</id>
     <title>阿征DNA</title>
-    <updated>2022-05-04T13:32:00.845Z</updated>
+    <updated>2022-05-05T14:50:16.231Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chenzdna.github.io"/>
     <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
@@ -80,7 +80,8 @@ access-control-allow-origin: request.Header.Get(&quot;Origin&quot;)
 <p>2022-04-26</p>
 <h2 id="追加1">追加#1</h2>
 <p>客户端增加，消息变多的时候响应体会变得非常大，可能会增大处理的负担。实测开三个浏览器（Edge，Firefox，Chrome）分别连续发 6.56 MB 长度的消息，服务端占用内存最高到 150 MB，倒是浏览器先撑不住，各占用了差不多 2 GB 的内存。</p>
-<p>2022-05-06</p>
+<p>解决方案是接收到分段响应后判断响应体长度，如果长度超过阈值则退出登录再重新请求一次。</p>
+<p>2022-05-05</p>
 ]]></content>
     </entry>
     <entry>
