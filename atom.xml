@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://chenzdna.github.io</id>
+    <id>http://www.chenz.icu</id>
     <title>阿征DNA</title>
-    <updated>2022-05-05T14:50:16.231Z</updated>
+    <updated>2022-05-07T12:03:14.855Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://chenzdna.github.io"/>
-    <link rel="self" href="https://chenzdna.github.io/atom.xml"/>
+    <link rel="alternate" href="http://www.chenz.icu"/>
+    <link rel="self" href="http://www.chenz.icu/atom.xml"/>
     <subtitle>修炼大魔法师</subtitle>
-    <logo>https://chenzdna.github.io/images/avatar.png</logo>
-    <icon>https://chenzdna.github.io/favicon.ico</icon>
+    <logo>http://www.chenz.icu/images/avatar.png</logo>
+    <icon>http://www.chenz.icu/favicon.ico</icon>
     <rights>All rights reserved 2022, 阿征DNA</rights>
     <entry>
         <title type="html"><![CDATA[[GoFrame] 使用 chunked 实现即时通信踩坑记录]]></title>
-        <id>https://chenzdna.github.io/post/goframe-shi-yong-chunked-shi-xian-ji-shi-tong-xin/</id>
-        <link href="https://chenzdna.github.io/post/goframe-shi-yong-chunked-shi-xian-ji-shi-tong-xin/">
+        <id>http://www.chenz.icu/post/goframe-shi-yong-chunked-shi-xian-ji-shi-tong-xin/</id>
+        <link href="http://www.chenz.icu/post/goframe-shi-yong-chunked-shi-xian-ji-shi-tong-xin/">
         </link>
         <updated>2022-04-26T10:47:54.000Z</updated>
         <content type="html"><![CDATA[<h1 id="前置知识">前置知识</h1>
@@ -86,8 +86,8 @@ access-control-allow-origin: request.Header.Get(&quot;Origin&quot;)
     </entry>
     <entry>
         <title type="html"><![CDATA[Java 使用枚举类与单例模式优化 if else 分支]]></title>
-        <id>https://chenzdna.github.io/post/java-shi-yong-mei-ju-lei-yu-dan-li-mo-shi-you-hua-ye-wu-luo-ji/</id>
-        <link href="https://chenzdna.github.io/post/java-shi-yong-mei-ju-lei-yu-dan-li-mo-shi-you-hua-ye-wu-luo-ji/">
+        <id>http://www.chenz.icu/post/java-shi-yong-mei-ju-lei-yu-dan-li-mo-shi-you-hua-ye-wu-luo-ji/</id>
+        <link href="http://www.chenz.icu/post/java-shi-yong-mei-ju-lei-yu-dan-li-mo-shi-you-hua-ye-wu-luo-ji/">
         </link>
         <updated>2022-03-25T12:36:16.000Z</updated>
         <content type="html"><![CDATA[<p>由于碰到了这样的需求，我又有点设计强迫症，故研究了一下。灵感来自我之前写的一个小工具 <a href="https://github.com/ChenzDNA/pypadb">pypadb</a>。实际上这种方法只适用于简单地查个数据然后返回给前端，要做修改的话还是需要判断查出来的类型再做强制类型转换。</p>
@@ -235,8 +235,8 @@ public class Tables {
     </entry>
     <entry>
         <title type="html"><![CDATA[装 Linux 系统后要做的事]]></title>
-        <id>https://chenzdna.github.io/post/zhuang-linux-xi-tong-hou-yao-zuo-de-shi/</id>
-        <link href="https://chenzdna.github.io/post/zhuang-linux-xi-tong-hou-yao-zuo-de-shi/">
+        <id>http://www.chenz.icu/post/zhuang-linux-xi-tong-hou-yao-zuo-de-shi/</id>
+        <link href="http://www.chenz.icu/post/zhuang-linux-xi-tong-hou-yao-zuo-de-shi/">
         </link>
         <updated>2022-02-21T08:29:26.000Z</updated>
         <content type="html"><![CDATA[<p>在二奶机上捣鼓 Linux 系统，有时候删了系统文件，重装了几次系统。为了以后重装系统配东西不再东找西找，就写了这一篇总结一下，<strong>仅供参考</strong>。</p>
@@ -263,8 +263,8 @@ public class Tables {
     </entry>
     <entry>
         <title type="html"><![CDATA[Spring Boot 监听 Redis 的键过期事件]]></title>
-        <id>https://chenzdna.github.io/post/spring-boot-jian-ting-redis-de-jian-guo-qi-shi-jian/</id>
-        <link href="https://chenzdna.github.io/post/spring-boot-jian-ting-redis-de-jian-guo-qi-shi-jian/">
+        <id>http://www.chenz.icu/post/spring-boot-jian-ting-redis-de-jian-guo-qi-shi-jian/</id>
+        <link href="http://www.chenz.icu/post/spring-boot-jian-ting-redis-de-jian-guo-qi-shi-jian/">
         </link>
         <updated>2022-02-21T07:35:42.000Z</updated>
         <content type="html"><![CDATA[<h1 id="redis-配置">Redis 配置</h1>
@@ -396,8 +396,8 @@ public class TestController {
     </entry>
     <entry>
         <title type="html"><![CDATA[pypadb 使用文档 #5、使用模块导入初始化 tables]]></title>
-        <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-5shi-yong-mo-kuai-dao-ru-chu-shi-hua-tables/</id>
-        <link href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-5shi-yong-mo-kuai-dao-ru-chu-shi-hua-tables/">
+        <id>http://www.chenz.icu/post/pypadb-shi-yong-wen-dang-5shi-yong-mo-kuai-dao-ru-chu-shi-hua-tables/</id>
+        <link href="http://www.chenz.icu/post/pypadb-shi-yong-wen-dang-5shi-yong-mo-kuai-dao-ru-chu-shi-hua-tables/">
         </link>
         <updated>2022-02-04T15:41:27.000Z</updated>
         <content type="html"><![CDATA[<p>这个算更新的内容，所以就没改以前写的初始化 tables 了。</p>
@@ -439,8 +439,8 @@ if __name__ == '__main__':
     </entry>
     <entry>
         <title type="html"><![CDATA[pypadb 使用文档 #4、使用 tables 查询]]></title>
-        <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-4shi-yong/</id>
-        <link href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-4shi-yong/">
+        <id>http://www.chenz.icu/post/pypadb-shi-yong-wen-dang-4shi-yong/</id>
+        <link href="http://www.chenz.icu/post/pypadb-shi-yong-wen-dang-4shi-yong/">
         </link>
         <updated>2022-01-30T12:14:20.000Z</updated>
         <content type="html"><![CDATA[<p>查询想对来说比较复杂，需要一些类来辅助。</p>
@@ -535,8 +535,8 @@ tables.test.select_like(likes=Like('content', '1', LikeEnum.ALL_Like))
     </entry>
     <entry>
         <title type="html"><![CDATA[pypadb 使用文档 #3、初始化 tables && 使用 tables 增删改]]></title>
-        <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-3chu-shi-hua-tables/</id>
-        <link href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-3chu-shi-hua-tables/">
+        <id>http://www.chenz.icu/post/pypadb-shi-yong-wen-dang-3chu-shi-hua-tables/</id>
+        <link href="http://www.chenz.icu/post/pypadb-shi-yong-wen-dang-3chu-shi-hua-tables/">
         </link>
         <updated>2022-01-30T10:19:22.000Z</updated>
         <content type="html"><![CDATA[<p>沿用 <a href="/post/pypadb-shi-yong-wen-dang-2">pypadb 使用文档 #2</a> 的表和实体类，这一篇将会使用 <code>pypadb.conf.table_configurer.tables</code> 来进行实体类和表的映射，极大的增加编写 CURD 的效率。</p>
@@ -569,8 +569,8 @@ tables.test.delete(id=1)
     </entry>
     <entry>
         <title type="html"><![CDATA[pypadb 使用文档 #2、使用装饰器进行增删改查操作]]></title>
-        <id>https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-2/</id>
-        <link href="https://chenzdna.github.io/post/pypadb-shi-yong-wen-dang-2/">
+        <id>http://www.chenz.icu/post/pypadb-shi-yong-wen-dang-2/</id>
+        <link href="http://www.chenz.icu/post/pypadb-shi-yong-wen-dang-2/">
         </link>
         <updated>2022-01-29T07:35:35.000Z</updated>
         <content type="html"><![CDATA[<p>pypadb 提供了 <code>@insert</code>、<code>@update</code>、<code>@delete</code>、<code>@select</code> 四个装饰器来扩展函数。</p>
@@ -660,8 +660,8 @@ def sel_test_many(concat: str) -&gt; list[Test]:
     </entry>
     <entry>
         <title type="html"><![CDATA[papadb 使用文档 #1、安装和配置项]]></title>
-        <id>https://chenzdna.github.io/post/papadb-shi-yong-wen-dang-1an-zhuang-he-pei-zhi-xiang/</id>
-        <link href="https://chenzdna.github.io/post/papadb-shi-yong-wen-dang-1an-zhuang-he-pei-zhi-xiang/">
+        <id>http://www.chenz.icu/post/papadb-shi-yong-wen-dang-1an-zhuang-he-pei-zhi-xiang/</id>
+        <link href="http://www.chenz.icu/post/papadb-shi-yong-wen-dang-1an-zhuang-he-pei-zhi-xiang/">
         </link>
         <updated>2022-01-25T20:22:06.000Z</updated>
         <content type="html"><![CDATA[<h1 id="安装">安装</h1>
@@ -800,8 +800,8 @@ tables.stuff.select_many()
     </entry>
     <entry>
         <title type="html"><![CDATA[关于 pypadb 的一些细节 #1]]></title>
-        <id>https://chenzdna.github.io/post/guan-yu-pypadb-de-yi-xie-xi-jie-1/</id>
-        <link href="https://chenzdna.github.io/post/guan-yu-pypadb-de-yi-xie-xi-jie-1/">
+        <id>http://www.chenz.icu/post/guan-yu-pypadb-de-yi-xie-xi-jie-1/</id>
+        <link href="http://www.chenz.icu/post/guan-yu-pypadb-de-yi-xie-xi-jie-1/">
         </link>
         <updated>2022-01-22T19:01:07.000Z</updated>
         <content type="html"><![CDATA[<h1 id="名字">名字</h1>
